@@ -1,5 +1,3 @@
-using dbPersonas.Controladores;
-using Microsoft.Data.Sqlite;
 using TP_2_Autos.Modelos;
 
 
@@ -72,16 +70,10 @@ namespace TP_2_Autos.Controladores
             Console.ReadKey();
         }
 
-        public static Cliente GuardarCliente(Cliente c)
+        public static void GuardarCliente(Cliente c)
         {
-            SqliteCommand sqliteCommand = new SqliteCommand("INSERT INTO Persona (Id, Nombre, Apellido, Telefono) VALUES (@Id, @Nombre, @Apellido, @Telefono)");
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Id", c.Id));
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Nombre", c.Nombre));
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Apellido", c.Apellido));
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Telefono", c.Telefono));
-            sqliteCommand.Connection = Conexion.MiConexion;
-            sqliteCommand.ExecuteNonQuery();
-            return c;
+            string linea = $"C|{c.Id}|{c.Dni}|{c.Nombre}|{c.Apellido}|{c.Telefono}";
+            File.AppendAllText("autos.txt", linea + Environment.NewLine);
         }
 
         public static void OrdenarClientes()
