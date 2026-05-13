@@ -11,26 +11,56 @@ namespace TP_2_Autos.Controladores
         {
             Console.Clear();
 
+            bool ValidarSoloLetras(string input) => !string.IsNullOrWhiteSpace(input) && input.All(c => !char.IsDigit(c));
+            bool ValidarSoloNumeros(string input) => !string.IsNullOrWhiteSpace(input) && input.All(c => !char.IsLetter(c));
+
+         
             int id = clientes.Count > 0 ? clientes.Max(c => c.Id) + 1 : 1;
 
             Console.Write("DNI:");
             string dni = Console.ReadLine()!.Trim();
 
+            if (!ValidarSoloNumeros(dni))
+            {
+                Console.WriteLine("DNI inválido (solo números). Presione una tecla.");
+                Console.ReadKey();
+                return;
+            }
+
             if (clientes.Any(c => c.Dni == dni))
             {
-                Console.WriteLine($"Ya existe un cliente con DNI '{dni}'. Presione una tecla...");
+                Console.WriteLine($"Ya existe un cliente con DNI '{dni}'. Presione una tecla.");
                 Console.ReadKey();
                 return;
             }
 
             Console.Write("Nombre: ");
             string nombre = Console.ReadLine()!.Trim();
+            if (!ValidarSoloLetras(nombre))
+            {
+                Console.WriteLine("Nombre inválido (solo letras). Presione una tecla.");
+                Console.ReadKey();
+                return;
+            }
+
 
             Console.Write("Apellido: ");
             string apellido = Console.ReadLine()!.Trim();
+            if (!ValidarSoloLetras(apellido))
+            {
+                Console.WriteLine("Apellido inválido (solo letras). Presione una tecla.");
+                Console.ReadKey();
+                return;
+            }
 
             Console.Write("Teléfono: ");
             string telefono = Console.ReadLine()!.Trim();
+            if (!ValidarSoloNumeros(telefono))
+            {
+                Console.WriteLine("Teléfono inválido (solo números). Presione una tecla.");
+                Console.ReadKey();
+                return;
+            }
 
             Cliente c = new Cliente(id, dni, nombre, apellido, telefono);
             clientes.Add(c);
@@ -215,5 +245,7 @@ namespace TP_2_Autos.Controladores
                 case 6: break;
             }
         }
+
+
     }
 }
