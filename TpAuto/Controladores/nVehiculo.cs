@@ -17,7 +17,7 @@ namespace TP_2_Autos.Controladores
 
             if (vehiculos.Any(v => v.Patente == patente))
             {
-                Console.WriteLine($"\n⚠ Ya existe un vehículo con la patente '{patente}'. Presione una tecla...");
+                Console.WriteLine($"\n Ya existe un vehículo con la patente '{patente}'. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
