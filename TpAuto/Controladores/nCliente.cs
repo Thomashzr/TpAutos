@@ -13,39 +13,36 @@ namespace TP_2_Autos.Controladores
 
             int id = clientes.Count > 0 ? clientes.Max(c => c.Id) + 1 : 1;
 
-            Console.Write("DNI      : ");
+            Console.Write("DNI:");
             string dni = Console.ReadLine()!.Trim();
 
             if (clientes.Any(c => c.Dni == dni))
             {
-                Console.WriteLine($"\n⚠ Ya existe un cliente con DNI '{dni}'. Presione una tecla...");
+                Console.WriteLine($"Ya existe un cliente con DNI '{dni}'. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
 
-            Console.Write("Nombre   : ");
+            Console.Write("Nombre: ");
             string nombre = Console.ReadLine()!.Trim();
 
-            Console.Write("Apellido : ");
+            Console.Write("Apellido: ");
             string apellido = Console.ReadLine()!.Trim();
 
-            Console.Write("Teléfono : ");
+            Console.Write("Teléfono: ");
             string telefono = Console.ReadLine()!.Trim();
 
-            Console.Write("Email    : ");
-            string email = Console.ReadLine()!.Trim();
-
-            Cliente c = new Cliente(id, dni, nombre, apellido, telefono, email);
+            Cliente c = new Cliente(id, dni, nombre, apellido, telefono);
             clientes.Add(c);
             GuardarCliente(c);
 
-            Console.WriteLine($"\n✔ Cliente registrado con ID {id}. Presione una tecla...");
+            Console.WriteLine($"Cliente registrado con ID {id}. Presione una tecla...");
             Console.ReadKey();
         }
 
         public static void GuardarCliente(Cliente c)
         {
-            string linea = $"C|{c.Id}|{c.Dni}|{c.Nombre}|{c.Apellido}|{c.Telefono}|{c.Email}";
+            string linea = $"C|{c.Id}|{c.Dni}|{c.Nombre}|{c.Apellido}|{c.Telefono}";
             File.AppendAllText("autos.txt", linea + Environment.NewLine);
         }
 
@@ -116,7 +113,7 @@ namespace TP_2_Autos.Controladores
 
             if (c.Reservas.Any(r => r.Estado == "Activa"))
             {
-                Console.WriteLine("\n⚠ El cliente tiene reservas activas y no puede eliminarse. Presione una tecla...");
+                Console.WriteLine("El cliente tiene reservas activas y no puede eliminarse. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
@@ -125,7 +122,7 @@ namespace TP_2_Autos.Controladores
             if (Console.ReadLine()!.Trim().ToUpper() != "S") return;
 
             clientes.Remove(c);
-            Console.WriteLine("✔ Cliente eliminado. Presione una tecla...");
+            Console.WriteLine("Cliente eliminado. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -150,11 +147,7 @@ namespace TP_2_Autos.Controladores
             string telefono = Console.ReadLine()!.Trim();
             if (!string.IsNullOrEmpty(telefono)) c.Telefono = telefono;
 
-            Console.Write($"Email [{c.Email}]: ");
-            string email = Console.ReadLine()!.Trim();
-            if (!string.IsNullOrEmpty(email)) c.Email = email;
-
-            Console.WriteLine("\n✔ Cliente modificado. Presione una tecla...");
+            Console.WriteLine("Cliente modificado. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -192,7 +185,7 @@ namespace TP_2_Autos.Controladores
             if (Console.ReadLine()!.Trim().ToUpper() == "S")
             {
                 File.WriteAllLines(nombreArchivo, lineas);
-                Console.WriteLine($"✔ Exportado a '{nombreArchivo}'.");
+                Console.WriteLine($"Exportado a '{nombreArchivo}'.");
             }
 
             Console.WriteLine("Presione una tecla...");

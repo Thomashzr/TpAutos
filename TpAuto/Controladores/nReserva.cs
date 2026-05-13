@@ -5,7 +5,7 @@ namespace TP_2_Autos.Controladores
     internal class nReserva
     {
         public static List<Reserva> reservas = new List<Reserva>();
-
+        
         public static void Crear()
         {
             Console.Clear();
