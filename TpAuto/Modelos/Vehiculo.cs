@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 namespace TP_2_Autos.Modelos
 {
     internal class Vehiculo
@@ -6,32 +8,28 @@ namespace TP_2_Autos.Modelos
         public string Patente { get; set; } = string.Empty;
         public string Marca { get; set; } = string.Empty;
         public string Modelo { get; set; } = string.Empty;
-        public int Anio { get; set; }
-        public string Categoria { get; set; } = string.Empty;
         public double PrecioPorDia { get; set; }
-        public bool Disponible { get; set; } = true;
+        public int Capacidad { get; set; }
 
         public List<Reserva> Reservas { get; set; } = new List<Reserva>();
 
         public Vehiculo() { }
 
-        public Vehiculo(int id, string patente, string marca, string modelo,
-                        int anio, string categoria, double precioPorDia)
+        public Vehiculo(int id, string patente, string marca, string modelo, double precioPorDia, int capacidad)
         {
             Id = id;
             Patente = patente;
             Marca = marca;
             Modelo = modelo;
-            Anio = anio;
-            Categoria = categoria;
             PrecioPorDia = precioPorDia;
-            Disponible = true;
+            Capacidad = capacidad;
+
             Reservas = new List<Reserva>();
         }
 
         public override string ToString()
         {
-            return $"[{Id}] {Marca} {Modelo} ({Anio}) - Patente: {Patente} | Categoría: {Categoria} | ${PrecioPorDia}/día";
+            return $"[{Id}] {Marca} {Modelo} - Patente: {Patente} | ${PrecioPorDia}/día";
         }
     }
 }
