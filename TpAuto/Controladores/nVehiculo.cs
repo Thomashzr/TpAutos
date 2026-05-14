@@ -28,16 +28,20 @@ namespace TP_2_Autos.Controladores
             string modelo = Console.ReadLine().Trim();
 
             double precio;
-            do
+            Console.Write("Precio por día : $");
+            string inputPrecio = Console.ReadLine()!.Replace(".", ",");
+            while (!double.TryParse(inputPrecio, out precio) || precio <= 0)
             {
-                Console.Write("Precio por día : $");
-            } while (!double.TryParse(Console.ReadLine(), out precio) || precio <= 0);
+                Console.Write("Precio inválido (Debe ser un numero mayor a 0), ingrese precio por día: $");
+                inputPrecio = Console.ReadLine()!.Replace(".", ",");
+            }
 
             int capacidad;
-            do
+            Console.Write("Capacidad      : ");
+            while (!int.TryParse(Console.ReadLine(), out capacidad) || capacidad <= 0) 
             {
-                Console.Write("Capacidad      : ");
-            } while (!int.TryParse(Console.ReadLine(), out capacidad) || capacidad <= 0);
+                Console.Write("Capacidad inválida (Debe ser un numero entero mayor a 0), ingrese capacidad: ");
+            } 
 
             Vehiculo v = new Vehiculo(id, patente, marca, modelo, precio, capacidad);
             vehiculos.Add(v);
@@ -95,11 +99,10 @@ namespace TP_2_Autos.Controladores
             }
 
             Console.Write("\nIngrese el ID del vehículo: ");
-            if (!int.TryParse(Console.ReadLine(), out int id))
+            int id;
+            while (!int.TryParse(Console.ReadLine(), out id))
             {
-                Console.WriteLine("ID inválido. Presione una tecla...");
-                Console.ReadKey();
-                return null;
+                Console.WriteLine("ID inválido. Vuelva a ingresar un ID:");
             }
 
             Vehiculo? vehiculo = vehiculos.FirstOrDefault(v => v.Id == id);
@@ -116,7 +119,11 @@ namespace TP_2_Autos.Controladores
         public static void Eliminar()
         {
             Vehiculo? v = Seleccionar();
-            if (v == null) return;
+            if (v == null)
+            {
+                Console.Write(" ERROR: Vehiculo inexistente/nulo");
+                return;
+            }
 
             if (v.Reservas.Any(r => r.Estado == "Activa"))
             {
@@ -133,10 +140,15 @@ namespace TP_2_Autos.Controladores
             Console.ReadKey();
         }
 
+        
         public static void Modificar()
         {
             Vehiculo? v = Seleccionar();
-            if (v == null) return;
+            if (v == null)
+            {
+                Console.Write(" ERROR: Vehiculo inexistente/nulo");
+                return;
+            }
 
             Console.Clear();
             Console.WriteLine($"Modificando: {v}\n");
@@ -179,17 +191,20 @@ namespace TP_2_Autos.Controladores
 
             DateTime desde, hasta;
 
-            do
-            {
-                Console.Write("Fecha desde (dd/MM/yyyy): ");
-            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy",
-                       null, System.Globalization.DateTimeStyles.None, out desde));
 
-            do
+            Console.Write("Fecha desde (dd/MM/yyyy): ");
+            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out desde))
             {
+                Console.WriteLine("Formato incorrecto. Por favor, intente nuevamente.");
+                Console.Write("Fecha desde (dd/MM/yyyy): ");
+            }
+
+            Console.Write("Fecha hasta (dd/MM/yyyy): ");
+            while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out hasta) || hasta <= desde)
+            {
+                Console.WriteLine("Fecha inválida o anterior/igual a la fecha de inicio. Intente nuevamente.");
                 Console.Write("Fecha hasta (dd/MM/yyyy): ");
-            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy",
-                       null, System.Globalization.DateTimeStyles.None, out hasta) || hasta <= desde);
+            }
 
             List<Vehiculo> disponibles = DisponiblesParaFecha(desde, hasta);
 
@@ -217,7 +232,7 @@ namespace TP_2_Autos.Controladores
                 tabla[i + 1, 1] = disponibles[i].Patente;
                 tabla[i + 1, 2] = disponibles[i].Marca;
                 tabla[i + 1, 3] = disponibles[i].Modelo;
-                tabla[i + 1, 4] = $"${disponibles[i].PrecioPorDia:F0}";
+                tabla[i + 1, 4] = $"${disponibles[i].PrecioPorDia:F2}";
             }
 
             Tabla.DibujaTabla(tabla);
