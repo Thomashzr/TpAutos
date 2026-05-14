@@ -48,5 +48,25 @@ namespace TpAuto.Persistencia
             sqliteCommand.ExecuteNonQuery();
             return v;
         }
+
+        public static void ModificarVehiculo(Vehiculo v)
+        {
+            SqliteCommand sqliteCommand = new SqliteCommand("UPDATE Autos SET Marca = @Marca, Modelo = @Modelo, PrecioDia = @PrecioDia, Capacidad = @Capacidad WHERE Id = @Id");
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Marca", v.Marca));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Modelo", v.Modelo));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@PrecioDia", v.PrecioPorDia));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Capacidad", v.Capacidad));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Id", v.Id));
+            sqliteCommand.Connection = Conexion.MiConexion;
+            sqliteCommand.ExecuteNonQuery();
+        }
+
+        public static void EliminarVehiculo(int id)
+        {
+            SqliteCommand sqliteCommand = new SqliteCommand("DELETE FROM Autos WHERE Id = @Id");
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Id", id));
+            sqliteCommand.Connection = Conexion.MiConexion;
+            sqliteCommand.ExecuteNonQuery();
+        }
     }
 }

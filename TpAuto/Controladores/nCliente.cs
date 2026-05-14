@@ -72,17 +72,9 @@ namespace TpAuto.Controladores
             Console.ReadKey();
         }
 
-        public static Cliente GuardarCliente(Cliente c)
+        public static void GuardarCliente(Cliente c)
         {
-            SqliteCommand sqliteCommand = new SqliteCommand("INSERT INTO Cliente (Id, DNI, Nombre, Apellido, Telefono) VALUES (@Id, @DNI, @Nombre, @Apellido, @Telefono)");
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Id", c.Id));
-            sqliteCommand.Parameters.Add(new SqliteParameter("@DNI", c.Dni));
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Nombre", c.Nombre));
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Apellido", c.Apellido));
-            sqliteCommand.Parameters.Add(new SqliteParameter("@Telefono", c.Telefono));
-            sqliteCommand.Connection = Conexion.MiConexion;
-            sqliteCommand.ExecuteNonQuery();
-            return c;
+            pCliente.GuardarCliente(c); 
         }
 
         public static void OrdenarClientes()
@@ -160,8 +152,13 @@ namespace TpAuto.Controladores
             Console.Write($"\n¿Confirma eliminar a '{c.Apellido}, {c.Nombre}'? (S/N): ");
             if (Console.ReadLine()!.Trim().ToUpper() != "S") return;
 
+           
+            TpAuto.Persistencia.pCliente.EliminarCliente(c.Id);
+
+            
             clientes.Remove(c);
-            Console.WriteLine("Cliente eliminado. Presione una tecla...");
+
+            Console.WriteLine("Cliente eliminado correctamente de la base de datos. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -186,7 +183,10 @@ namespace TpAuto.Controladores
             string telefono = Console.ReadLine()!.Trim();
             if (!string.IsNullOrEmpty(telefono)) c.Telefono = telefono;
 
-            Console.WriteLine("Cliente modificado. Presione una tecla...");
+            
+
+            pCliente.ModificarCliente(c);
+            Console.WriteLine("Cliente modificado en la base de datos. Presione una tecla...");
             Console.ReadKey();
         }
 

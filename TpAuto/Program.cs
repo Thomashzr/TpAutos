@@ -1,5 +1,6 @@
 ﻿using TpAuto.Controladores;
 using TpAuto.Modelos;
+using TpAuto.Persistencia;
 
 namespace TpAuto
 {
@@ -7,8 +8,34 @@ namespace TpAuto
     {
         public static void Main(string[] args)
         {
-            
+            Conexion.OpenConexion();
+
+            nVehiculo.vehiculos = pVehiculo.getAll();
+            nCliente.clientes = pCliente.getAll();
+            nReserva.reservas = pReserva.getAll();
+
+            foreach (var r in nReserva.reservas)
+            {
+               
+                r.ClienteDeLaReserva = nCliente.clientes.FirstOrDefault(c => c.Id == r.ClienteId);
+                r.VehiculoDeLaReserva = nVehiculo.vehiculos.FirstOrDefault(v => v.Id == r.VehiculoId);
+
+                
+                if (r.ClienteDeLaReserva != null)
+                    r.ClienteDeLaReserva.Reservas.Add(r);
+
+                if (r.VehiculoDeLaReserva != null)
+                    r.VehiculoDeLaReserva.Reservas.Add(r);
+            }
+
+           
             funcionMenu();
+
+            
+            Conexion.CloseConexion();
+        
+
+        
         }
 
         public static void funcionMenu()
