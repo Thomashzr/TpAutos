@@ -12,49 +12,44 @@ namespace TP_2_Autos.Controladores
 
             int id = vehiculos.Count > 0 ? vehiculos.Max(v => v.Id) + 1 : 1;
 
-            Console.Write("Patente       : ");
-            string patente = Console.ReadLine()!.Trim().ToUpper();
+            Console.Write("Patente        : ");
+            string patente = Console.ReadLine().Trim().ToUpper();
 
-            if (vehiculos.Any(v => v.Patente == patente))
+            while (vehiculos.Any(v => v.Patente == patente))
             {
-                Console.WriteLine($"\n⚠ Ya existe un vehículo con la patente '{patente}'. Presione una tecla...");
-                Console.ReadKey();
-                return;
+                Console.WriteLine($"\n Ya existe un vehículo con la patente '{patente}'. Ingrese una patente válida: ");
+                patente = Console.ReadLine().Trim().ToUpper();
             }
 
-            Console.Write("Marca         : ");
-            string marca = Console.ReadLine()!.Trim();
+            Console.Write("Marca          : ");
+            string marca = Console.ReadLine().Trim();
 
-            Console.Write("Modelo        : ");
-            string modelo = Console.ReadLine()!.Trim();
-
-            int anio;
-            do
-            {
-                Console.Write("Año           : ");
-            } while (!int.TryParse(Console.ReadLine(), out anio) || anio < 1900 || anio > DateTime.Now.Year + 1);
-
-            Console.WriteLine("Categorías: Sedan | SUV | Pickup | Hatchback | Furgón | Otro");
-            Console.Write("Categoría     : ");
-            string categoria = Console.ReadLine()!.Trim();
+            Console.Write("Modelo         : ");
+            string modelo = Console.ReadLine().Trim();
 
             double precio;
             do
             {
-                Console.Write("Precio por día: $");
+                Console.Write("Precio por día : $");
             } while (!double.TryParse(Console.ReadLine(), out precio) || precio <= 0);
 
-            Vehiculo v = new Vehiculo(id, patente, marca, modelo, anio, categoria, precio);
+            int capacidad;
+            do
+            {
+                Console.Write("Capacidad      : ");
+            } while (!int.TryParse(Console.ReadLine(), out capacidad) || capacidad <= 0);
+
+            Vehiculo v = new Vehiculo(id, patente, marca, modelo, precio, capacidad);
             vehiculos.Add(v);
             GuardarVehiculo(v);
 
-            Console.WriteLine($"\n✔ Vehículo registrado con ID {id}. Presione una tecla...");
+            Console.WriteLine($"\n Vehículo registrado con ID {id}. Presione una tecla...");
             Console.ReadKey();
         }
 
         public static void GuardarVehiculo(Vehiculo v)
         {
-            string linea = $"V|{v.Id}|{v.Patente}|{v.Marca}|{v.Modelo}|{v.Anio}|{v.Categoria}|{v.PrecioPorDia}|{v.Disponible}";
+            string linea = $"V|{v.Id}|{v.Patente}|{v.Marca}|{v.Modelo}|{v.PrecioPorDia}|{v.Capacidad}";
             File.AppendAllText("autos.txt", linea + Environment.NewLine);
         }
 
@@ -68,13 +63,12 @@ namespace TP_2_Autos.Controladores
             Console.Clear();
             OrdenarVehiculos();
 
-            string[,] tabla = new string[vehiculos.Count + 1, 6];
+            string[,] tabla = new string[vehiculos.Count + 1, 5];
             tabla[0, 0] = "ID";
             tabla[0, 1] = "Patente";
             tabla[0, 2] = "Marca";
             tabla[0, 3] = "Modelo";
-            tabla[0, 4] = "Año";
-            tabla[0, 5] = "$/día";
+            tabla[0, 4] = "$/día";
 
             for (int i = 0; i < vehiculos.Count; i++)
             {
@@ -82,8 +76,7 @@ namespace TP_2_Autos.Controladores
                 tabla[i + 1, 1] = vehiculos[i].Patente;
                 tabla[i + 1, 2] = vehiculos[i].Marca;
                 tabla[i + 1, 3] = vehiculos[i].Modelo;
-                tabla[i + 1, 4] = vehiculos[i].Anio.ToString();
-                tabla[i + 1, 5] = $"${vehiculos[i].PrecioPorDia:F0}";
+                tabla[i + 1, 4] = $"${vehiculos[i].PrecioPorDia:F0}";
             }
 
             Tabla.DibujaTabla(tabla);
@@ -127,7 +120,7 @@ namespace TP_2_Autos.Controladores
 
             if (v.Reservas.Any(r => r.Estado == "Activa"))
             {
-                Console.WriteLine("\n⚠ El vehículo tiene reservas activas y no puede eliminarse. Presione una tecla...");
+                Console.WriteLine("\n El vehículo tiene reservas activas y no puede eliminarse. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
@@ -136,7 +129,7 @@ namespace TP_2_Autos.Controladores
             if (Console.ReadLine()!.Trim().ToUpper() != "S") return;
 
             vehiculos.Remove(v);
-            Console.WriteLine("✔ Vehículo eliminado. Presione una tecla...");
+            Console.WriteLine(" Vehículo eliminado. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -157,15 +150,15 @@ namespace TP_2_Autos.Controladores
             string modelo = Console.ReadLine()!.Trim();
             if (!string.IsNullOrEmpty(modelo)) v.Modelo = modelo;
 
-            Console.Write($"Categoría [{v.Categoria}]: ");
-            string cat = Console.ReadLine()!.Trim();
-            if (!string.IsNullOrEmpty(cat)) v.Categoria = cat;
-
             Console.Write($"Precio por día [{v.PrecioPorDia}]: $");
             string precioStr = Console.ReadLine()!.Trim();
             if (double.TryParse(precioStr, out double precio) && precio > 0) v.PrecioPorDia = precio;
 
-            Console.WriteLine("\n✔ Vehículo modificado. Presione una tecla...");
+            Console.Write($"Capacidad [{v.Capacidad}]: ");
+            string capacidadStr = Console.ReadLine()!.Trim();
+            if (int.TryParse(capacidadStr, out int capacidad) && capacidad > 0) v.Capacidad = capacidad;
+
+            Console.WriteLine("\n Vehículo modificado. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -211,13 +204,12 @@ namespace TP_2_Autos.Controladores
                 return;
             }
 
-            string[,] tabla = new string[disponibles.Count + 1, 6];
+            string[,] tabla = new string[disponibles.Count + 1, 5];
             tabla[0, 0] = "ID";
             tabla[0, 1] = "Patente";
             tabla[0, 2] = "Marca";
             tabla[0, 3] = "Modelo";
-            tabla[0, 4] = "Categoría";
-            tabla[0, 5] = "$/día";
+            tabla[0, 4] = "$/día";
 
             for (int i = 0; i < disponibles.Count; i++)
             {
@@ -225,8 +217,7 @@ namespace TP_2_Autos.Controladores
                 tabla[i + 1, 1] = disponibles[i].Patente;
                 tabla[i + 1, 2] = disponibles[i].Marca;
                 tabla[i + 1, 3] = disponibles[i].Modelo;
-                tabla[i + 1, 4] = disponibles[i].Categoria;
-                tabla[i + 1, 5] = $"${disponibles[i].PrecioPorDia:F0}";
+                tabla[i + 1, 4] = $"${disponibles[i].PrecioPorDia:F0}";
             }
 
             Tabla.DibujaTabla(tabla);
