@@ -74,8 +74,9 @@ namespace TP_2_Autos.Controladores
 
         public static Cliente GuardarCliente(Cliente c)
         {
-            SqliteCommand sqliteCommand = new SqliteCommand("INSERT INTO Cliente (Id, Nombre, Apellido, Telefono) VALUES (@Id, @Nombre, @Apellido, @Telefono)");
+            SqliteCommand sqliteCommand = new SqliteCommand("INSERT INTO Cliente (Id, DNI, Nombre, Apellido, Telefono) VALUES (@Id, @DNI, @Nombre, @Apellido, @Telefono)");
             sqliteCommand.Parameters.Add(new SqliteParameter("@Id", c.Id));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@DNI", c.Dni));
             sqliteCommand.Parameters.Add(new SqliteParameter("@Nombre", c.Nombre));
             sqliteCommand.Parameters.Add(new SqliteParameter("@Apellido", c.Apellido));
             sqliteCommand.Parameters.Add(new SqliteParameter("@Telefono", c.Telefono));
