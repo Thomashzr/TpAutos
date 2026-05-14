@@ -46,5 +46,24 @@ namespace TpAuto.Persistencia
             sqliteCommand.ExecuteNonQuery();
             return c;
         }
+
+        public static void ModificarCliente(Cliente c)
+        {
+            SqliteCommand sqliteCommand = new SqliteCommand("UPDATE Cliente SET Nombre = @Nombre, Apellido = @Apellido, Telefono = @Telefono WHERE Id = @Id");
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Nombre", c.Nombre));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Apellido", c.Apellido));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Telefono", c.Telefono));
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Id", c.Id));
+            sqliteCommand.Connection = Conexion.MiConexion;
+            sqliteCommand.ExecuteNonQuery();
+        }
+
+        public static void EliminarCliente(int id)
+        {
+            SqliteCommand sqliteCommand = new SqliteCommand("DELETE FROM Cliente WHERE Id = @Id");
+            sqliteCommand.Parameters.Add(new SqliteParameter("@Id", id));
+            sqliteCommand.Connection = Conexion.MiConexion;
+            sqliteCommand.ExecuteNonQuery();
+        }
     }
 }
