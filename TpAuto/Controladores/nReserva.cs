@@ -212,7 +212,8 @@ namespace TpAuto.Controladores
             {
                 Console.Write("Nueva fecha desde (dd/MM/yyyy): ");
             } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy",
-                       null, System.Globalization.DateTimeStyles.None, out desde));
+                       null, System.Globalization.DateTimeStyles.None, out desde)
+                        || desde.Date < DateTime.Today);
 
             do
             {
