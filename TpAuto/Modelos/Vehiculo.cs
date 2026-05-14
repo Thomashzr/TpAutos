@@ -1,6 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 
-namespace TP_2_Autos.Modelos
+namespace TpAuto.Modelos
 {
     internal class Vehiculo
     {

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace dbPersonas.Controladores
+namespace TpAuto.Persistencia
 {
-    internal class Conexion
+    internal static class Conexion
     {
 
         private static SqliteConnection miConexion = new SqliteConnection("Data Source=DbAutos.db");

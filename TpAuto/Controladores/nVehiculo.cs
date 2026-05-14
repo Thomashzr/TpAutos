@@ -1,6 +1,6 @@
-using TP_2_Autos.Modelos;
+using TpAuto.Modelos;
 
-namespace TP_2_Autos.Controladores
+namespace TpAuto.Controladores
 {
     internal class nVehiculo
     {

@@ -1,4 +1,4 @@
-namespace TP_2_Autos.Modelos
+namespace TpAuto.Modelos
 {
     internal class Cliente
     {
