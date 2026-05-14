@@ -1,4 +1,4 @@
-﻿namespace TP_2_Autos;
+﻿namespace TpAuto;
 
 using System;
 using System.Collections.Generic;

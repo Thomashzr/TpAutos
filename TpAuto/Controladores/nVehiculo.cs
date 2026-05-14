@@ -1,6 +1,7 @@
-using TP_2_Autos.Modelos;
+using TpAuto.Modelos;
+using TpAuto.Persistencia;
 
-namespace TP_2_Autos.Controladores
+namespace TpAuto.Controladores
 {
     internal class nVehiculo
     {
@@ -53,8 +54,7 @@ namespace TP_2_Autos.Controladores
 
         public static void GuardarVehiculo(Vehiculo v)
         {
-            string linea = $"V|{v.Id}|{v.Patente}|{v.Marca}|{v.Modelo}|{v.PrecioPorDia}|{v.Capacidad}";
-            File.AppendAllText("autos.txt", linea + Environment.NewLine);
+            pVehiculo.GuardarVehiculo(v); 
         }
 
         public static void OrdenarVehiculos()
@@ -135,8 +135,11 @@ namespace TP_2_Autos.Controladores
             Console.Write($"\n¿Confirma eliminar '{v.Marca} {v.Modelo} ({v.Patente})'? (S/N): ");
             if (Console.ReadLine()!.Trim().ToUpper() != "S") return;
 
+            
+            TpAuto.Persistencia.pVehiculo.EliminarVehiculo(v.Id);
             vehiculos.Remove(v);
-            Console.WriteLine(" Vehículo eliminado. Presione una tecla...");
+
+            Console.WriteLine(" Vehículo eliminado de la base de datos. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -170,7 +173,10 @@ namespace TP_2_Autos.Controladores
             string capacidadStr = Console.ReadLine()!.Trim();
             if (int.TryParse(capacidadStr, out int capacidad) && capacidad > 0) v.Capacidad = capacidad;
 
-            Console.WriteLine("\n Vehículo modificado. Presione una tecla...");
+            
+
+            pVehiculo.ModificarVehiculo(v);
+            Console.WriteLine("\n Vehículo modificado en la base de datos. Presione una tecla...");
             Console.ReadKey();
         }
 

@@ -1,11 +1,11 @@
-using TP_2_Autos.Modelos;
+using TpAuto.Modelos;
 
-namespace TP_2_Autos.Controladores
+namespace TpAuto.Controladores
 {
     internal class nReserva
     {
         public static List<Reserva> reservas = new List<Reserva>();
-
+        
         public static void Crear()
         {
             Console.Clear();
@@ -95,8 +95,8 @@ namespace TP_2_Autos.Controladores
 
         public static void GuardarReserva(Reserva r)
         {
-            string linea = $"R|{r.Id}|{r.FechaDesde:dd/MM/yyyy}|{r.FechaHasta:dd/MM/yyyy}|{r.ClienteId}|{r.VehiculoId}|{r.CostoTotal:F2}|{r.Estado}";
-            File.AppendAllText("autos.txt", linea + Environment.NewLine);
+           
+            TpAuto.Persistencia.pReserva.GuardarReserva(r);
         }
 
         public static void OrdenarReservas()
@@ -177,7 +177,7 @@ namespace TP_2_Autos.Controladores
 
             if (r.Estado != "Activa")
             {
-                Console.WriteLine($"\n⚠ La reserva ya está '{r.Estado}' y no puede cancelarse. Presione una tecla...");
+                Console.WriteLine($"\nLa reserva ya está '{r.Estado}' y no puede cancelarse. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
@@ -186,7 +186,7 @@ namespace TP_2_Autos.Controladores
             if (Console.ReadLine()!.Trim().ToUpper() != "S") return;
 
             r.Estado = "Cancelada";
-            Console.WriteLine("✔ Reserva cancelada. Presione una tecla...");
+            Console.WriteLine("Reserva cancelada. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -197,7 +197,7 @@ namespace TP_2_Autos.Controladores
 
             if (r.Estado != "Activa")
             {
-                Console.WriteLine($"\n⚠ Solo se pueden modificar reservas activas. Estado actual: '{r.Estado}'. Presione una tecla...");
+                Console.WriteLine($"\nSolo se pueden modificar reservas activas. Estado actual: '{r.Estado}'. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
@@ -212,7 +212,8 @@ namespace TP_2_Autos.Controladores
             {
                 Console.Write("Nueva fecha desde (dd/MM/yyyy): ");
             } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy",
-                       null, System.Globalization.DateTimeStyles.None, out desde));
+                       null, System.Globalization.DateTimeStyles.None, out desde)
+                        || desde.Date < DateTime.Today);
 
             do
             {
@@ -230,16 +231,20 @@ namespace TP_2_Autos.Controladores
 
             if (hayConflicto)
             {
-                Console.WriteLine("\n⚠ El vehículo ya tiene una reserva en ese período. Presione una tecla...");
+                Console.WriteLine("\nEl vehículo ya tiene una reserva en ese período. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
 
+            
             r.FechaDesde = desde;
             r.FechaHasta = hasta;
             r.CostoTotal = r.CantidadDias * r.VehiculoDeLaReserva!.PrecioPorDia;
 
-            Console.WriteLine($"\n✔ Reserva actualizada. Nuevo total: ${r.CostoTotal:F2}. Presione una tecla...");
+            
+            TpAuto.Persistencia.pReserva.ModificarReserva(r);
+
+            Console.WriteLine($"\nReserva actualizada en la base de datos. Nuevo total: ${r.CostoTotal:F2}. Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -251,11 +256,13 @@ namespace TP_2_Autos.Controladores
             Console.Write($"\n¿Confirma eliminar la reserva #{r.Id}? (S/N): ");
             if (Console.ReadLine()!.Trim().ToUpper() != "S") return;
 
+            TpAuto.Persistencia.pReserva.EliminarReserva(r.Id);
+
             r.ClienteDeLaReserva?.Reservas.Remove(r);
             r.VehiculoDeLaReserva?.Reservas.Remove(r);
             reservas.Remove(r);
 
-            Console.WriteLine("✔ Reserva eliminada. Presione una tecla...");
+            Console.WriteLine("Reserva eliminada de la base de datos y memoria. Presione una tecla...");
             Console.ReadKey();
         }
 
