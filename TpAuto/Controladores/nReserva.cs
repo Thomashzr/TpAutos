@@ -35,7 +35,7 @@ namespace TpAuto.Controladores
 
             if (disponibles.Count == 0)
             {
-                Console.WriteLine("\n⚠ No hay vehículos disponibles para ese período. Presione una tecla...");
+                Console.WriteLine("\n No hay vehículos disponibles para ese período. Presione una tecla...");
                 Console.ReadKey();
                 return;
             }
@@ -89,7 +89,7 @@ namespace TpAuto.Controladores
 
             GuardarReserva(nueva);
 
-            Console.WriteLine($"\n✔ Reserva #{id} creada. Total: ${nueva.CostoTotal:F2} ({nueva.CantidadDias} días). Presione una tecla...");
+            Console.WriteLine($"\n Reserva #{id} creada. Total: ${nueva.CostoTotal:F2} ({nueva.CantidadDias} días). Presione una tecla...");
             Console.ReadKey();
         }
 
@@ -279,7 +279,7 @@ namespace TpAuto.Controladores
             if (Console.ReadLine()!.Trim().ToUpper() == "S")
             {
                 File.WriteAllLines(nombreArchivo, lineas);
-                Console.WriteLine($"✔ Exportado a '{nombreArchivo}'.");
+                Console.WriteLine($" Exportado a '{nombreArchivo}'.");
             }
 
             Console.WriteLine("Presione una tecla...");

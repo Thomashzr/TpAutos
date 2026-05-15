@@ -279,7 +279,7 @@ namespace TpAuto.Controladores
             if (Console.ReadLine()!.Trim().ToUpper() == "S")
             {
                 File.WriteAllLines(nombreArchivo, lineas);
-                Console.WriteLine($"✔ Exportado a '{nombreArchivo}'.");
+                Console.WriteLine($" Exportado a '{nombreArchivo}'.");
             }
 
             Console.WriteLine("Presione una tecla...");
