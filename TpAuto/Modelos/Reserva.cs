@@ -6,7 +6,6 @@ namespace TpAuto.Modelos
         public DateTime FechaDesde { get; set; }
         public DateTime FechaHasta { get; set; }
         public double CostoTotal { get; set; }
-        public string Estado { get; set; } = "Activa";
 
         public int ClienteId { get; set; }
         public int VehiculoId { get; set; }
@@ -26,7 +25,6 @@ namespace TpAuto.Modelos
             FechaHasta = fechaHasta;
             ClienteId = clienteId;
             VehiculoId = vehiculoId;
-            Estado = "Activa";
             CostoTotal = (fechaHasta - fechaDesde).Days * precioPorDia;
         }
 
@@ -34,7 +32,7 @@ namespace TpAuto.Modelos
         {
             string cliente = ClienteDeLaReserva != null ? $"{ClienteDeLaReserva.Apellido}, {ClienteDeLaReserva.Nombre}" : $"ClienteId:{ClienteId}";
             string vehiculo = VehiculoDeLaReserva != null ? $"{VehiculoDeLaReserva.Marca} {VehiculoDeLaReserva.Modelo}" : $"VehiculoId:{VehiculoId}";
-            return $"[{Id}] {cliente} | {vehiculo} | {FechaDesde:dd/MM/yyyy} → {FechaHasta:dd/MM/yyyy} ({CantidadDias} días) | ${CostoTotal:F2} | {Estado}";
+            return $"[{Id}] {cliente} | {vehiculo} | {FechaDesde:dd/MM/yyyy} → {FechaHasta:dd/MM/yyyy} ({CantidadDias} días) | ${CostoTotal:F2}";
         }
     }
 }
