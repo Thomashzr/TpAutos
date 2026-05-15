@@ -16,19 +16,21 @@ namespace TpAuto.Controladores
             Console.WriteLine("\n── Paso 2: Ingresar fechas ──");
             DateTime desde, hasta;
 
-            do
+            Console.Write("Fecha desde (dd/MM/yyyy): ");
+            string inputDesde = Console.ReadLine()!.Trim();
+            while (!DateTime.TryParseExact(inputDesde, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out desde) || desde.Date < DateTime.Today)
             {
-                Console.Write("Fecha desde (dd/MM/yyyy): ");
-            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy",
-                       null, System.Globalization.DateTimeStyles.None, out desde)
-                     || desde.Date < DateTime.Today);
+                Console.Write("Fecha inválida (Debe ser una fecha presente o futura en formato dd/MM/yyyy) \nIngrese fecha desde (dd/MM/yyyy): ");
+                inputDesde = Console.ReadLine()!.Trim();
+            }
 
-            do
+            Console.Write("Fecha hasta (dd/MM/yyyy): ");
+            string inputHasta = Console.ReadLine()!.Trim();
+            while (!DateTime.TryParseExact(inputHasta, "dd/MM/yyyy", null, System.Globalization.DateTimeStyles.None, out hasta) || hasta <= desde)
             {
-                Console.Write("Fecha hasta (dd/MM/yyyy): ");
-            } while (!DateTime.TryParseExact(Console.ReadLine(), "dd/MM/yyyy",
-                       null, System.Globalization.DateTimeStyles.None, out hasta)
-                     || hasta <= desde);
+                Console.Write("Fecha inválida (Debe ser una fecha posterior a la fecha desde) \nIngrese fecha hasta (dd/MM/yyyy): ");
+                inputHasta = Console.ReadLine()!.Trim();
+            }
 
             Console.WriteLine("\n── Paso 3: Seleccionar vehículo disponible ──");
             List<Vehiculo> disponibles = nVehiculo.DisponiblesParaFecha(desde, hasta);
