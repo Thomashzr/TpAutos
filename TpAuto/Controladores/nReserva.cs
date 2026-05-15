@@ -5,7 +5,7 @@ namespace TpAuto.Controladores
     internal class nReserva
     {
         public static List<Reserva> reservas = new List<Reserva>();
-        
+
         public static void Crear()
         {
             Console.Clear();
@@ -95,7 +95,6 @@ namespace TpAuto.Controladores
 
         public static void GuardarReserva(Reserva r)
         {
-           
             TpAuto.Persistencia.pReserva.GuardarReserva(r);
         }
 
@@ -170,37 +169,10 @@ namespace TpAuto.Controladores
             return reserva;
         }
 
-        public static void Cancelar()
-        {
-            Reserva? r = Seleccionar();
-            if (r == null) return;
-
-            if (r.Estado != "Activa")
-            {
-                Console.WriteLine($"\nLa reserva ya está '{r.Estado}' y no puede cancelarse. Presione una tecla...");
-                Console.ReadKey();
-                return;
-            }
-
-            Console.Write($"\n¿Confirma cancelar la reserva #{r.Id}? (S/N): ");
-            if (Console.ReadLine()!.Trim().ToUpper() != "S") return;
-
-            r.Estado = "Cancelada";
-            Console.WriteLine("Reserva cancelada. Presione una tecla...");
-            Console.ReadKey();
-        }
-
         public static void Modificar()
         {
             Reserva? r = Seleccionar();
             if (r == null) return;
-
-            if (r.Estado != "Activa")
-            {
-                Console.WriteLine($"\nSolo se pueden modificar reservas activas. Estado actual: '{r.Estado}'. Presione una tecla...");
-                Console.ReadKey();
-                return;
-            }
 
             Console.Clear();
             Console.WriteLine($"Modificando reserva #{r.Id}");
@@ -224,7 +196,6 @@ namespace TpAuto.Controladores
 
             bool hayConflicto = r.VehiculoDeLaReserva!.Reservas.Any(otra =>
                 otra.Id != r.Id &&
-                otra.Estado == "Activa" &&
                 otra.FechaDesde < hasta &&
                 otra.FechaHasta > desde
             );
@@ -236,12 +207,10 @@ namespace TpAuto.Controladores
                 return;
             }
 
-            
             r.FechaDesde = desde;
             r.FechaHasta = hasta;
             r.CostoTotal = r.CantidadDias * r.VehiculoDeLaReserva!.PrecioPorDia;
 
-            
             TpAuto.Persistencia.pReserva.ModificarReserva(r);
 
             Console.WriteLine($"\nReserva actualizada en la base de datos. Nuevo total: ${r.CostoTotal:F2}. Presione una tecla...");
@@ -271,7 +240,7 @@ namespace TpAuto.Controladores
             Console.Clear();
             OrdenarReservas();
 
-            string[,] tabla = new string[reservas.Count + 1, 8];
+            string[,] tabla = new string[reservas.Count + 1, 7];
             tabla[0, 0] = "ID";
             tabla[0, 1] = "Cliente";
             tabla[0, 2] = "Vehículo";
@@ -279,7 +248,6 @@ namespace TpAuto.Controladores
             tabla[0, 4] = "Hasta";
             tabla[0, 5] = "Días";
             tabla[0, 6] = "Total";
-            tabla[0, 7] = "Estado";
 
             for (int i = 0; i < reservas.Count; i++)
             {
@@ -297,7 +265,6 @@ namespace TpAuto.Controladores
                 tabla[i + 1, 4] = reservas[i].FechaHasta.ToString("dd/MM/yyyy");
                 tabla[i + 1, 5] = reservas[i].CantidadDias.ToString();
                 tabla[i + 1, 6] = $"${reservas[i].CostoTotal:F2}";
-                tabla[i + 1, 7] = reservas[i].Estado;
             }
 
             Tabla.DibujaTabla(tabla);
@@ -325,7 +292,6 @@ namespace TpAuto.Controladores
                 "Nueva reserva",
                 "Listar reservas",
                 "Modificar reserva",
-                "Cancelar reserva",
                 "Eliminar reserva",
                 "Reporte de reservas",
                 "Volver"
@@ -338,10 +304,9 @@ namespace TpAuto.Controladores
                 case 1: Crear(); Menu(); break;
                 case 2: Imprimir(); Console.ReadKey(); Menu(); break;
                 case 3: Modificar(); Menu(); break;
-                case 4: Cancelar(); Menu(); break;
-                case 5: Eliminar(); Menu(); break;
-                case 6: ReporteReservas(); Menu(); break;
-                case 7: break;
+                case 4: Eliminar(); Menu(); break;
+                case 5: ReporteReservas(); Menu(); break;
+                case 6: break;
             }
         }
     }

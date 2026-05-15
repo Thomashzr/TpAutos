@@ -125,7 +125,7 @@ namespace TpAuto.Controladores
                 return;
             }
 
-            if (v.Reservas.Any(r => r.Estado == "Activa"))
+            if (v.Reservas.Count > 0)
             {
                 Console.WriteLine("\n El vehículo tiene reservas activas y no puede eliminarse. Presione una tecla...");
                 Console.ReadKey();
@@ -184,7 +184,6 @@ namespace TpAuto.Controladores
         {
             return vehiculos.Where(v =>
                 !v.Reservas.Any(r =>
-                    r.Estado == "Activa" &&
                     r.FechaDesde < hasta &&
                     r.FechaHasta > desde
                 )

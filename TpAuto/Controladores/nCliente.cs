@@ -142,7 +142,7 @@ namespace TpAuto.Controladores
             Cliente? c = Seleccionar();
             if (c == null) return;
 
-            if (c.Reservas.Any(r => r.Estado == "Activa"))
+            if (c.Reservas.Count > 0)
             {
                 Console.WriteLine("El cliente tiene reservas activas y no puede eliminarse. Presione una tecla...");
                 Console.ReadKey();
